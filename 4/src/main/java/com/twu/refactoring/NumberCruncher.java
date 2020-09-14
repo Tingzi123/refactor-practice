@@ -1,41 +1,51 @@
 package com.twu.refactoring;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class NumberCruncher {
     private final int[] numbers;
+    private final Map<String,Integer> numbersMap;
 
     public NumberCruncher(int... numbers) {
         this.numbers = numbers;
+        numbersMap = new HashMap<String, Integer>() {
+            {
+                put("even",0);
+                put("odd",0);
+                put("positive",0);
+                put("negative",0);
+            }};
     }
 
     public int countEven() {
-        int count = 0;
-        for (int number : numbers) {
-            if (number % 2 == 0) count++;
-        }
-        return count;
+        return getNumbersCount("even");
     }
 
     public int countOdd() {
-        int count = 0;
-        for (int number : numbers) {
-            if (number % 2 == 1) count++;
-        }
-        return count;
+        return getNumbersCount("odd");
     }
 
     public int countPositive() {
-        int count = 0;
-        for (int number : numbers) {
-            if (number >= 0) count++;
-        }
-        return count;
+        return getNumbersCount("positive");
     }
 
     public int countNegative() {
-        int count = 0;
+        return getNumbersCount("negative");
+    }
+
+    private int getNumbersCount(String pattern) {
+        Map<String, Integer> reMap = countNumbers();
+        return reMap.get(pattern);
+    }
+
+    public Map<String,Integer> countNumbers(){
         for (int number : numbers) {
-            if (number < 0) count++;
+            if (number % 2 == 0) numbersMap.put("even",numbersMap.get("even")+1);
+            if (number % 2 == 1) numbersMap.put("odd",numbersMap.get("odd")+1);
+            if (number >= 0) numbersMap.put("positive",numbersMap.get("positive")+1);
+            if (number < 0) numbersMap.put("negative",numbersMap.get("negative")+1);
         }
-        return count;
+        return numbersMap;
     }
 }
